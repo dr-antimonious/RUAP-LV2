@@ -1,15 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ContactManager.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ContactManager.Controllers
 {
     public class ContactController : Controller
     {
-        public string[] Get()
+        public Contact[] Get()
         {
             return new[]
             {
-                "Hello",
-                "World"
+                new Contact
+                {
+                    Id = 1,
+                    Name = "Glenn Block"
+                },
+                new Contact
+                {
+                    Id = 2,
+                    Name = "Dan Roth"
+                }
             };
         }
     }
