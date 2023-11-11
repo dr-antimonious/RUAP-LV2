@@ -1,3 +1,5 @@
+using ContactManager.Services;
+
 namespace ContactManager
 {
     public class Program
@@ -9,6 +11,7 @@ namespace ContactManager
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddMemoryCache();
+            builder.Services.AddSingleton<ContactRepository>();
 
             var app = builder.Build();
 

@@ -8,9 +8,9 @@ namespace ContactManager.Controllers
     {
         private ContactRepository contactRepository;
 
-        public ContactController()
+        public ContactController(ContactRepository contactRepository)
         {
-            this.contactRepository = new ContactRepository();
+            this.contactRepository = contactRepository;
         }
 
         public Contact[] Get()
