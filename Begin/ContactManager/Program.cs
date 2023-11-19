@@ -1,4 +1,5 @@
 using ContactManager.Services;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ContactManager
 {
@@ -12,6 +13,8 @@ namespace ContactManager
             builder.Services.AddControllersWithViews();
             builder.Services.AddMemoryCache();
             builder.Services.AddSingleton<ContactRepository>();
+            builder.Services.AddSingleton<IMemoryCache, MemoryCache>();
+            builder.Services.AddHttpClient();
 
             var app = builder.Build();
 
@@ -23,7 +26,7 @@ namespace ContactManager
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();

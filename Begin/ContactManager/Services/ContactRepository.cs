@@ -26,7 +26,7 @@ namespace ContactManager.Services
                     }
                 };
 
-                _memoryCache.CreateEntry(CacheKey).Value = contacts;
+                _ = _memoryCache.Set(CacheKey, contacts);
             }
         }
 
@@ -47,16 +47,25 @@ namespace ContactManager.Services
 
         public bool SaveContact(Contact contact)
         {
+            Contact[] tempArray;
+            List<Contact> tempList;
+
             try
             {
                 if (_memoryCache.TryGetValue(CacheKey, out var currentData))
                 {
                     if (currentData is not null)
-                        ((List<Contact>)currentData).Add(contact);
-                    else
-                        currentData = new List<Contact> { contact };
+                    {
+                        tempArray = (Contact[]) currentData;
+                        tempList = tempArray.ToList();
+                        tempList.Add(contact);
 
-                    _ = _memoryCache.Set(CacheKey, (Contact[])currentData);
+                        tempArray = tempList.ToArray();
+                    }
+                    else
+                        tempArray = new[] {contact};
+
+                    _ = _memoryCache.Set(CacheKey, tempArray);
                     return true;
                 }
 

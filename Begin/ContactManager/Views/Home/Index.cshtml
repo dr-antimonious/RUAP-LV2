@@ -1,22 +1,51 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var contacts = (Contact[]?)ViewData["Contacts"];
 }
 
 <div class="text-center">
-    <ul id="contacts"></ul>
+    <ul id="contacts">
+        @foreach (Contact contact in contacts!)
+        {
+            <li>@contact.Name</li>
+        }
+    </ul>
+    <form onsubmit="storeContact(event)" id="saveContactForm" method="post">
+        <h3>Create a new Contact</h3>
+        <p>
+            <label for="contactId">Contact Id:</label>
+            <input type="text" name="Id" id="contactId" />
+        </p>
+        <p>
+            <label for="contactName">Contact Name:</label>
+            <input type="text" name="Name" id="contactName"/>
+        </p>
+        <input type="submit" id="saveContact" value="Save" />
+    </form>
 </div>
 
-@section Scripts{
-    <script type="text/javascript">
-$(function()
+@section Scripts
 {
-        $.getJSON('/api/contact', function(contactsJsonPayload)
-        {
-            $(contactsJsonPayload).each(function(i, item)
-            {
-                $('#contacts').append('<li>' + item.Name + '</li>');
-            });
-        });
-});
-</script>
+    <script type="text/javascript">
+        async function storeContact(event) {
+            const baseUrl = "https://localhost:7137/api/contacts/post?Id=";
+            const nameBase = "&Name=";
+            const id = event.target.elements.contactId.value;
+            const name = event.target.elements.contactName.value;
+
+            const reply = await fetch(baseUrl + id + nameBase + name, {method: "POST"})
+            if (!reply.ok) {
+                return;
+            }
+
+            const list = document.getElementById("contacts");
+            if (!list) {
+                return;
+            }
+
+            var item = document.createElement("li");
+            item.appendChild(document.createTextNode(name));
+            list.appendChild(item);
+        }
+    </script>
 }
